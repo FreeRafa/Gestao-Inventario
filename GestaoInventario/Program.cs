@@ -20,18 +20,29 @@ services.AddDbContext<GestaoInventarioContext>(options =>
 using var serviceProvider = services.BuildServiceProvider();
 using var scope = serviceProvider.CreateScope();
 
+//var context = scope.ServiceProvider.GetRequiredService<GestaoInventarioContext>();
+
+//try
+//{
+//    context.Database.OpenConnection();
+//    Console.WriteLine("Ligação feita com sucesso!");
+//}
+//catch (Exception ex)
+//{
+//    Console.WriteLine("Erro ao ligar: " + ex.Message);
+//}
+
 var context = scope.ServiceProvider.GetRequiredService<GestaoInventarioContext>();
 
 try
 {
-    context.Database.OpenConnection();
-    Console.WriteLine("Ligação feita com sucesso!");
+    var categorias = await context.Categoria.ToListAsync();
+    Console.WriteLine($"Ligação e mapeamento OK. {categorias.Count} categoria(s) encontrada(s).");
 }
 catch (Exception ex)
 {
-    Console.WriteLine("Erro ao ligar: " + ex.Message);
+    Console.WriteLine("Erro ao consultar: " + ex.Message);
 }
-
 
 
 //using (SqlConnection conn = new SqlConnection(connectionString))
