@@ -20,17 +20,6 @@ services.AddDbContext<GestaoInventarioContext>(options =>
 using var serviceProvider = services.BuildServiceProvider();
 using var scope = serviceProvider.CreateScope();
 
-//var context = scope.ServiceProvider.GetRequiredService<GestaoInventarioContext>();
-
-//try
-//{
-//    context.Database.OpenConnection();
-//    Console.WriteLine("Ligação feita com sucesso!");
-//}
-//catch (Exception ex)
-//{
-//    Console.WriteLine("Erro ao ligar: " + ex.Message);
-//}
 
 var context = scope.ServiceProvider.GetRequiredService<GestaoInventarioContext>();
 
