@@ -9,8 +9,8 @@ namespace GestaoInventario.Modelo.Entidades
         public int Id { get; set; }
         public string Nome { get; set; } = string.Empty;
         public string Nif { get; set; } = string.Empty;
-        public string? Email { get; set; } = string.Empty;
         public string Telefone { get; set; } = string.Empty;
+        public string? Email { get; set; }   
 
         public ICollection<MovimentoStock> Movimentos { get; set; } = new List<MovimentoStock>();
     }
