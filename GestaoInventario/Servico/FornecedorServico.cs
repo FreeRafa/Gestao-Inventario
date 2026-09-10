@@ -25,10 +25,18 @@ namespace GestaoInventario.Servico
             return _fornecedorRepositorio.ObterPorIdAsync(id);
         }
 
-        public Task<Fornecedor> CriarFornecedorAsync(Fornecedor fornecedor)
+        public async Task<Fornecedor> CriarFornecedorAsync(Fornecedor fornecedor)
         {
-            return _fornecedorRepositorio.CriarFornecedorAsync(fornecedor);
+            var nifExistente = await _fornecedorRepositorio.ObterPorNifAsync(fornecedor.Nif);
+
+            if (nifExistente != null)
+            {
+                throw new InvalidOperationException($"Já existe um fornecedor com o NIF '{fornecedor.Nif}'.");
+            }
+
+            return await _fornecedorRepositorio.CriarFornecedorAsync(fornecedor);
         }
+                         
 
         public Task<Fornecedor> AtualizarFornecedorAsync(Fornecedor fornecedor)
         {

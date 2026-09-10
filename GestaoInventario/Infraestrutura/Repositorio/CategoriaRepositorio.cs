@@ -51,5 +51,11 @@ namespace GestaoInventario.Infraestrutura.Repositorio
         {
             return await _context.Categoria.ToListAsync();
         }
+
+        public async Task<Categoria?> ObterPorNomeAsync(string nome)
+        {
+            return await _context.Categoria
+                .FirstOrDefaultAsync(c => c.Nome == nome);
+        }
     }
 }

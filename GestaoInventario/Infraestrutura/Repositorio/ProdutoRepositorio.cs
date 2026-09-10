@@ -57,5 +57,11 @@ namespace GestaoInventario.Infraestrutura.Repositorio
                 .Include(p => p.Categoria)
                 .ToListAsync();
         }
+
+        public async Task<Produto?> ObterPorCodigoAsync(string codigo)
+        {
+            return await _context.Produto
+                .FirstOrDefaultAsync(p => p.Codigo == codigo);
+        }
     }
 }

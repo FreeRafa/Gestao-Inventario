@@ -26,9 +26,16 @@ namespace GestaoInventario.Servico
             return _categoriaRepositorio.ObterPorIdAsync(id);
         }
 
-        public Task<Categoria> CriarCategoriaAsync(Categoria categoria)
+        public async Task<Categoria> CriarCategoriaAsync(Categoria categoria)
         {
-            return _categoriaRepositorio.CriarCategoriaAsync(categoria);
+            var categoriaExistente = await _categoriaRepositorio.ObterPorNomeAsync(categoria.Nome);
+
+            if (categoriaExistente != null)
+            {
+                throw new InvalidOperationException($"Já existe uma categoria com o nome '{categoria.Nome}'.");
+            }
+
+            return await _categoriaRepositorio.CriarCategoriaAsync(categoria);
         }
 
         public Task<Categoria> AtualizarCategoriaAsync(Categoria categoria)

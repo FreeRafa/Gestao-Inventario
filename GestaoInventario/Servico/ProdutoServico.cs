@@ -27,9 +27,16 @@ namespace GestaoInventario.Servico
             return _produtoRepositorio.ObterPorIdAsync(id);
         }
 
-        public Task<Produto> CriarProdutoAsync(Produto produto)
+        public async Task<Produto> CriarProdutoAsync(Produto produto)
         {
-            return _produtoRepositorio.CriarProdutoAsync(produto);
+            var produtoExistente = await _produtoRepositorio.ObterPorCodigoAsync(produto.Codigo);
+
+            if (produtoExistente != null)
+            {
+                throw new InvalidOperationException($"Já existe um produto com o código '{produto.Codigo}'.");
+            }
+
+            return await _produtoRepositorio.CriarProdutoAsync(produto);
         }
 
         public Task<Produto> AtualizarProdutoAsync(Produto produto)

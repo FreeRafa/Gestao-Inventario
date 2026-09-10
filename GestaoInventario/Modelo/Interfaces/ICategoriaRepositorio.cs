@@ -13,5 +13,6 @@ namespace GestaoInventario.Modelo.Interfaces
         public Task<Categoria> AtualizarCategoriaAsync(Categoria categoria);
         public Task<Categoria?> DeletarCategoriaAsync(int id);
         public Task<List<Categoria>> ObterTodasCategoriasAsync();
+        Task<Categoria?> ObterPorNomeAsync(string nome);
     }
 }

@@ -51,5 +51,11 @@ namespace GestaoInventario.Infraestrutura.Repositorio
         {
             return await _context.Fornecedor.ToListAsync();
         }
+
+        public async Task<Fornecedor?> ObterPorNifAsync(string Nif)
+        {
+            return await _context.Fornecedor
+                .FirstOrDefaultAsync(f => f.Nif == Nif);
+        }
     }
 }

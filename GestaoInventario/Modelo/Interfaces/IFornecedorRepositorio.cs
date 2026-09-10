@@ -13,5 +13,6 @@ namespace GestaoInventario.Modelo.Interfaces
         Task<Fornecedor> AtualizarFornecedorAsync(Fornecedor fornecedor);
         Task<Fornecedor?> DeletarFornecedorAsync(int id);
         Task<List<Fornecedor>> ObterTodosFornecedoresAsync();
+        Task<Fornecedor?> ObterPorNifAsync(string Nif);
     }
 }
