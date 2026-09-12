@@ -44,5 +44,10 @@ namespace GestaoInventario.Servico
         {
             return _produtoRepositorio.DeletarProdutoAsync(id);
         }
+
+        public Task<List<Produto>> ObterProdutosComStockAbaixoDoMinimoAsync()
+        {
+            return _produtoRepositorio.ObterProdutosComStockAbaixoDoMinimoAsync();
+        }
     }
 }

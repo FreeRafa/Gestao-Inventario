@@ -69,7 +69,7 @@ namespace GestaoInventario.Apresentacao.Menu.MenuGestao
         {
             Console.WriteLine("=== Adicionar Categoria ===");
             Console.Write("Nome: ");
-            var nome = Console.ReadLine();
+            var nome = Console.ReadLine() ?? string.Empty;
             var categoria = new Categoria { Nome = nome };
             await _categoriaServico.CriarCategoriaAsync(categoria);
             Console.WriteLine("Categoria adicionada com sucesso! Pressione qualquer tecla para voltar...");
@@ -87,7 +87,7 @@ namespace GestaoInventario.Apresentacao.Menu.MenuGestao
 
             Console.WriteLine("=== Atualizar Categoria ===");
             Console.Write("ID da Categoria: ");
-            var id = int.Parse(Console.ReadLine());
+            var id = int.Parse(Console.ReadLine() ?? "0");
             var categoria = await _categoriaServico.ObterPorIdAsync(id);
             if (categoria == null)
             {
@@ -114,7 +114,7 @@ namespace GestaoInventario.Apresentacao.Menu.MenuGestao
 
             Console.WriteLine("=== Deletar Categoria ===");
             Console.Write("ID da Categoria: ");
-            var id = int.Parse(Console.ReadLine());
+            var id = int.Parse(Console.ReadLine() ?? "0");
             await _categoriaServico.DeletarCategoriaAsync(id);
             Console.WriteLine("Categoria deletada com sucesso! Pressione qualquer tecla para voltar...");
             Console.ReadKey();

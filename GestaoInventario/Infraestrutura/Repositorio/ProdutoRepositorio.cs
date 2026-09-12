@@ -63,5 +63,13 @@ namespace GestaoInventario.Infraestrutura.Repositorio
             return await _context.Produto
                 .FirstOrDefaultAsync(p => p.Codigo == codigo);
         }
+
+        public async Task<List<Produto>> ObterProdutosComStockAbaixoDoMinimoAsync()
+        {
+            return await _context.Produto
+                .Include(p => p.Categoria)
+                .Where(p => p.QuantidadeEmStock < p.StockMinimo)
+                .ToListAsync();
+        }
     }
 }

@@ -14,6 +14,6 @@ namespace GestaoInventario.Modelo.Interfaces
         Task<Produto?> DeletarProdutoAsync(int id);
         Task<List<Produto>> ObterTodosProdutosAsync();
         Task<Produto?> ObterPorCodigoAsync(string codigo);
-
+        Task<List<Produto>> ObterProdutosComStockAbaixoDoMinimoAsync();
     }
 }
