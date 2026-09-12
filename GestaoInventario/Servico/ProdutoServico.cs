@@ -1,9 +1,5 @@
-﻿using GestaoInventario.Infraestrutura.Repositorio;
-using GestaoInventario.Modelo.Entidades;
+﻿using GestaoInventario.Modelo.Entidades;
 using GestaoInventario.Modelo.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 
 namespace GestaoInventario.Servico
