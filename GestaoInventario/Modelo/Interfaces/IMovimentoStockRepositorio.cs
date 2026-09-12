@@ -13,5 +13,6 @@ namespace GestaoInventario.Modelo.Interfaces
         Task<MovimentoStock> AtualizarMovimentoStockAsync(MovimentoStock movimentoStock);
         Task<MovimentoStock?> DeletarMovimentoStockAsync(int id);
         Task<List<MovimentoStock>> ObterMovimentosPorProdutoIdAsync(int produtoId);
+        
     }
 }

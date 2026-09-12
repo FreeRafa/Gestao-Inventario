@@ -9,10 +9,12 @@ namespace GestaoInventario.Apresentacao.Menu.MenuGestao
     public class MenuProduto
     {
         private readonly ProdutoServico _produtoServico;
+        private readonly CategoriaServico _categoriaServico;
 
-        public MenuProduto(ProdutoServico produtoServico)
+        public MenuProduto(ProdutoServico produtoServico, CategoriaServico categoriaServico)
         {
             _produtoServico = produtoServico;
+            _categoriaServico = categoriaServico;
         }
 
         public async Task ExibirAsyncProduto()
@@ -76,22 +78,30 @@ namespace GestaoInventario.Apresentacao.Menu.MenuGestao
             Console.WriteLine("=== Adicionar Produto ===");
             Console.Write("Nome: ");
             var nome = Console.ReadLine();
-            Console.Write("Código: ");
 
+            Console.Write("Código: ");
             var codigo = Console.ReadLine();
-            Console.Write("Quantidade em Stock: ");
 
             Console.Write("Preço Unitário: ");
             var precoUnitario = decimal.Parse(Console.ReadLine() ?? "0");
 
+            Console.Write("Quantidade em Stock: ");
+            var quantidadeEmStock = int.Parse(Console.ReadLine() ?? "0");
+
             Console.Write("Stock Mínimo: ");
             var stockMinimo = int.Parse(Console.ReadLine() ?? "0");
+
+            // Listar categorias disponíveis antes de pedir o Id
+            var categorias = await _categoriaServico.ObterTodasCategoriasAsync();
+            Console.WriteLine("=== Categorias disponíveis ===");
+            foreach (var categoria in categorias)
+            {
+                Console.WriteLine($"Id: {categoria.Id}, Nome: {categoria.Nome}");
+            }
 
             Console.Write("ID da Categoria: ");
             var categoriaId = int.Parse(Console.ReadLine() ?? "0");
 
-
-            var quantidadeEmStock = int.Parse(Console.ReadLine() ?? "0");
             var produto = new Produto
             {
                 Nome = nome ?? string.Empty,
@@ -101,12 +111,13 @@ namespace GestaoInventario.Apresentacao.Menu.MenuGestao
                 StockMinimo = stockMinimo,
                 CategoriaId = categoriaId
             };
+
             try
             {
                 await _produtoServico.CriarProdutoAsync(produto);
                 Console.WriteLine("Produto adicionado com sucesso!");
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 Console.WriteLine($"Erro ao adicionar produto: {ex.Message}");
             }
@@ -129,7 +140,7 @@ namespace GestaoInventario.Apresentacao.Menu.MenuGestao
             var produto = await _produtoServico.ObterPorIdAsync(id);
             if (produto == null)
             {
-                Console.WriteLine("Produto não encontrado.");
+                Console.WriteLine("Produto não encontrado. Pressione qualquer tecla para voltar...");
                 Console.ReadKey();
                 return;
             }
@@ -137,7 +148,7 @@ namespace GestaoInventario.Apresentacao.Menu.MenuGestao
             Console.Write($"Nome ({produto.Nome}): ");
             var nome = Console.ReadLine();
 
-            Console.Write($"Código ({produto.Codigo}):");
+            Console.Write($"Código ({produto.Codigo}): ");
             var codigo = Console.ReadLine();
 
             Console.Write($"Preço Unitário ({produto.PrecoUnitario}): ");
@@ -158,7 +169,14 @@ namespace GestaoInventario.Apresentacao.Menu.MenuGestao
                 ? produto.StockMinimo
                 : int.Parse(stockMinimoInput);
 
-            Console.Write($"Categoria atual: {produto.Categoria.Nome} (ID: {produto.CategoriaId}). Novo ID de Categoria: ");
+            Console.WriteLine($"Categoria atual: {produto.Categoria.Nome} (ID: {produto.CategoriaId})");
+            var categorias = await _categoriaServico.ObterTodasCategoriasAsync();
+            Console.WriteLine("Categorias disponíveis:");
+            foreach (var categoria in categorias)
+            {
+                Console.WriteLine($"  Id: {categoria.Id}, Nome: {categoria.Nome}");
+            }
+            Console.Write("Novo ID de Categoria (Enter para manter): ");
             var categoriaIdInput = Console.ReadLine();
             var categoriaId = string.IsNullOrWhiteSpace(categoriaIdInput)
                 ? produto.CategoriaId
@@ -176,7 +194,7 @@ namespace GestaoInventario.Apresentacao.Menu.MenuGestao
                 await _produtoServico.AtualizarProdutoAsync(produto);
                 Console.WriteLine("Produto atualizado com sucesso!");
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 Console.WriteLine($"Erro ao atualizar produto: {ex.Message}");
             }

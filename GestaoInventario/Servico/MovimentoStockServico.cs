@@ -72,5 +72,37 @@ namespace GestaoInventario.Servico
 
             return await _movimentoStockRepositorio.CriarMovimentoStockAsync(movimento);
         }
+
+        public async Task<MovimentoStock> RegistarAjusteAsync(int produtoId, int quantidadeFinal, string? observacao)
+        {
+            var produto = await _produtoRepositorio.ObterPorIdAsync(produtoId);
+            if (produto is null)
+                throw new KeyNotFoundException($"Produto com Id {produtoId} não encontrado.");
+
+            if (quantidadeFinal < 0)
+                throw new InvalidOperationException("A quantidade final não pode ser negativa.");
+
+            var diferenca = quantidadeFinal - produto.QuantidadeEmStock;
+            if (diferenca == 0)
+                throw new InvalidOperationException("A quantidade final é igual à quantidade atual; não há ajuste a registar.");
+
+            var direcao = diferenca > 0 ? "aumento" : "redução";
+            var observacaoCompleta = $"Ajuste ({direcao} de {Math.Abs(diferenca)}, de {produto.QuantidadeEmStock} para {quantidadeFinal})"
+                + (string.IsNullOrWhiteSpace(observacao) ? string.Empty : $" - {observacao}");
+
+            produto.QuantidadeEmStock = quantidadeFinal;
+            await _produtoRepositorio.AtualizarProdutoAsync(produto);
+
+            var movimento = new MovimentoStock
+            {
+                TipoMovimento = TipoMovimento.Ajuste,
+                Quantidade = Math.Abs(diferenca),
+                ProdutoId = produtoId,
+                FornecedorId = null,
+                Observacao = observacaoCompleta
+            };
+
+            return await _movimentoStockRepositorio.CriarMovimentoStockAsync(movimento);
+        }
     }
 }
